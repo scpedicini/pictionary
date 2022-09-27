@@ -1,5 +1,8 @@
 # Overview
 
+Here is the embedded image:
+
+![Logo](assets/logo.jpg)
 
 # Diffusion Communicator
 
