@@ -1,7 +1,5 @@
 # Overview
 
-Here is the embedded image:
-
 ![Logo](discord-bot/assets/logo.jpg)
 
 # Diffusion Communicator
