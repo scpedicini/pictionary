@@ -2,7 +2,7 @@
 
 Here is the embedded image:
 
-![Logo](assets/logo.jpg)
+![Logo](discord-bot/assets/logo.jpg)
 
 # Diffusion Communicator
 
