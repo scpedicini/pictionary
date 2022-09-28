@@ -12,6 +12,10 @@ const commands = [
         description: 'Replies with Pong!',
     },
     {
+        name: 'delayed-ping',
+        description: 'Replies with Pong! after an arbitrary amount of seconds',
+    },
+    {
         name: 'render',
         description: 'Render a prompt',
         options: [

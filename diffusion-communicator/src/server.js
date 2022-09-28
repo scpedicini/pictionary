@@ -26,40 +26,51 @@ const authenticateRequest = (req, res, next) => {
     }
 }
 
+let isGenerating = false;
+
 // use authenticationRequest middleware to authenticate requests
 app.use(authenticateRequest);
-
-
 app.use(bodyParser.json());
 
-
 app.get('/hello', (req, res) => res.send('Goodbye!'));
-
 
 app.get('/fake-generate', (req, res) => {
     res.status(200).json(FAKE_GENERATED_JSON);
 });
 
+app.get('/is-busy', (req, res) => {
+    res.status(200).json({isGenerating});
+});
+
 app.get('/generate', async (req, res) => {
     try {
-        const prompt = req.query.prompt;
-        const steps = req.query.steps || 30;
+        if(!isGenerating) {
+            isGenerating = true;
+            const prompt = req.query.prompt;
+            const steps = req.query.steps || 30;
 
-        console.log("prompt: ", prompt);
+            console.log("prompt: ", prompt);
 
-        const body = JSON.stringify(createResponseBody({prompt, steps}));
-        console.log(body);
+            const body = JSON.stringify(createResponseBody({prompt, steps}));
+            console.log(body);
 
-        const response = await axios.get(STABLE_DIFFUSION_ENDPOINT, {
-            data: body
-        });
+            const response = await axios.get(STABLE_DIFFUSION_ENDPOINT, {
+                data: body
+            });
 
-        if (response.status === 200 && response.data) {
-            res.status(200).json(response.data);
+            if (response.status === 200 && response.data) {
+                res.status(200).json(response.data);
+                return;
+            }
+        } else {
+            res.status(500).json({error: 'Already generating'});
             return;
         }
+
     } catch (error) {
         console.log(error);
+    } finally {
+        isGenerating = false;
     }
 
     res.status(500).json({error: 'Something went wrong'});
