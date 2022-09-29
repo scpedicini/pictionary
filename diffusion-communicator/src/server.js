@@ -51,10 +51,11 @@ app.get('/generate', async (req, res) => {
             isGenerating = true;
             const prompt = req.query.prompt;
             const steps = req.query.steps || 30;
+            const seed = req.query.seed || -1;
 
             console.log("prompt: ", prompt);
 
-            const body = JSON.stringify(createResponseBody({prompt, steps}));
+            const body = JSON.stringify(createResponseBody({prompt, steps, seed}));
             console.log(body);
 
             const response = await axios.get(STABLE_DIFFUSION_ENDPOINT, {
