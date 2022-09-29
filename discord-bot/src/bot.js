@@ -23,7 +23,9 @@ client.on('interactionCreate', async (interaction) => {
             await interaction.deferReply();
 
             const prompt = interaction.options.getString('prompt');
-            const steps = interaction.options.getInteger('steps') || 30;
+            let steps = (interaction.options.getInteger('steps') || 30);
+            // cap steps from 1 to 50
+            steps = Math.max(1, Math.min(50, steps));
 
             // are we currently running a render?
             const {isGenerating} = await fetchEndpoint('/is-busy', {});
