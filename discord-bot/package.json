@@ -5,7 +5,9 @@
   "main": "src/bot.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/bot.js"
+    "start": "node src/bot.js",
+    "prod": "export NODE_ENV=prod && node src/bot.js",
+    "pm2-prod": "pm2 start npm --name discord-bot -- run prod"
   },
   "author": "",
   "license": "ISC",

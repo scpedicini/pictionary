@@ -16,6 +16,10 @@ const commands = [
         description: 'Replies with Pong! after an arbitrary amount of seconds',
     },
     {
+        name: 'pictionary',
+        description: 'Play a round of pictionary',
+    },
+    {
         name: 'render',
         description: 'Render a prompt',
         options: [
