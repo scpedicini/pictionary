@@ -8,8 +8,7 @@ async function renderIntent(interaction) {
         await interaction.deferReply();
 
         const prompt = interaction.options.getString('prompt');
-        const steps = interaction.options.getInteger('steps') || 30;
-
+        const steps =  Math.max(1, Math.min(50, interaction.options.getInteger('steps') || 30));
         console.log(`Running render for prompt: ${prompt} with ${steps} steps`);
 
         // are we currently running a render?
