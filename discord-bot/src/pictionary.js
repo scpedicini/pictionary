@@ -1,14 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import {getItemByWeightedProbability, getRandomItemFromArray} from "./bot-helpers.js";
+import './typings.js';
 
 class WordGenerator {
 
     /**
      * A dictionary of words by category
-     * @type {Object<string, string[]>}
+     * @type {Pack[]}
      */
-    wordLists
+    wordPacks
 
     /**
      * List of artists
@@ -23,7 +24,7 @@ class WordGenerator {
     mediums
 
     constructor() {
-        this.wordLists = {};
+        this.wordPacks = [];
         this.artists = [];
         this.mediums = [];
     }
@@ -36,16 +37,14 @@ class WordGenerator {
         if (specificPackFiles) {
             // load specific packs
             for (const packFile of specificPackFiles) {
-                const wordList = JSON.parse(fs.readFileSync(path.join(category_folder, packFile), 'utf8'));
-                const name = packFile.split('.')[0];
-                this.wordLists[name] = wordList;
+                const pack = JSON.parse(fs.readFileSync(path.join(category_folder, packFile), 'utf8'));
+                this.wordPacks.push(pack);
             }
         } else {
             const files = fs.readdirSync(category_folder).filter(file => file.endsWith('.json'));
             files.forEach(file => {
-                const wordList = JSON.parse(fs.readFileSync(path.join(category_folder, file), 'utf8'));
-                const name = file.split('.')[0];
-                this.wordLists[name] = wordList;
+                const pack = JSON.parse(fs.readFileSync(path.join(category_folder, file), 'utf8'));
+                this.wordPacks.push(pack);
             });
         }
 
@@ -68,7 +67,7 @@ class WordGenerator {
      */
     cloneWordGenerator() {
         const clone = new WordGenerator();
-        clone.wordLists = JSON.parse(JSON.stringify(this.wordLists));
+        clone.wordPacks = JSON.parse(JSON.stringify(this.wordPacks));
         clone.artists = JSON.parse(JSON.stringify(this.artists));
         clone.mediums = JSON.parse(JSON.stringify(this.mediums));
         clone.styles = JSON.parse(JSON.stringify(this.styles));
@@ -76,16 +75,11 @@ class WordGenerator {
         return clone;
     }
 
-    getRandomWordFromCategory(category, removeFromCategory = false) {
-        const wordList = this.wordLists[category];
-        const word = getRandomItemFromArray(wordList, removeFromCategory);
-        return word;
-    }
-
-    getRandomWordFromRandomCategory(removeFromCategory) {
-        const category = getRandomItemFromArray(Object.keys(this.wordLists));
-        const word = this.getRandomWordFromCategory(category, removeFromCategory);
-        return word;
+    /**
+     * @return {Pack}
+     */
+    getRandomPack() {
+        return getRandomItemFromArray(this.wordPacks);
     }
 
     getRandomArtist() {
@@ -107,7 +101,14 @@ class WordGenerator {
 }
 
 const masterWordGenerator = new WordGenerator();
-masterWordGenerator.initialize(path.resolve('packs'), ['animals.json', 'places.json', 'people.json', 'starwars.json']);
+masterWordGenerator.initialize(path.resolve('packs') /*[
+    'animals.json',
+    'places.json',
+    'people.json',
+    'starwars.json',
+    'cartoons.json',
+    'disney.json'
+]*/);
 
 /**
  * Represents a self-contained game of pictionary
@@ -161,19 +162,35 @@ class Pictionary {
         this.initialState = true;
     }
 
-    getRandomWord() {
-        const word = this.wordGenerator.getRandomWordFromRandomCategory(false);
+    getRandomPrompt(packName) {
+        const pack = packName ? this.wordGenerator.wordPacks.find(w => w.name === packName) : this.wordGenerator.getRandomPack();
+        const word = getRandomItemFromArray(pack.words);
         this.usedWords.push(word);
 
         const artist = this.wordGenerator.getRandomArtist();
         const style = this.wordGenerator.getRandomStyle();
 
-        const artist_or_style = getItemByWeightedProbability([artist, style], [0.75, 0.25]);
+        const artist_or_style = getItemByWeightedProbability([artist, style], [0.65, 0.35]);
 
         const medium = this.wordGenerator.getRandomMedium();
         const modifier = this.wordGenerator.getRandomModifier();
 
-        return { word: word, artist: artist_or_style, medium: medium, modifier: Math.random() < 0.1 ? modifier : undefined };
+        let prompt = `${word}`;
+        if(Array.isArray(pack.tags) && pack.tags.length > 0) {
+            prompt += ` ${pack.tags.join(' ')}`;
+        }
+
+        prompt += `, ${artist_or_style}, ${medium}`;
+        if(Math.random() < 0.1) {
+            prompt += `, ${modifier}`;
+        }
+
+        prompt = prompt.trim();
+
+        return {
+            word: word,
+            prompt: prompt
+        };
     }
 
 }

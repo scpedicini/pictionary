@@ -20,6 +20,10 @@ const commands = [
         description: 'Play a round of pictionary',
     },
     {
+        name: 'reset',
+        description: 'Reset for bot if it is stuck',
+    },
+    {
         name: 'render',
         description: 'Render a prompt',
         options: [
