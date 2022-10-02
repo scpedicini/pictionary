@@ -164,7 +164,7 @@ class Pictionary {
 
     getRandomPrompt(packName) {
         const pack = packName ? this.wordGenerator.wordPacks.find(w => w.name === packName) : this.wordGenerator.getRandomPack();
-        const word = getRandomItemFromArray(pack.words);
+        let word = getRandomItemFromArray(pack.words);
         this.usedWords.push(word);
 
         const artist = this.wordGenerator.getRandomArtist();
@@ -177,15 +177,27 @@ class Pictionary {
 
         let prompt = `${word}`;
         if(Array.isArray(pack.tags) && pack.tags.length > 0) {
-            prompt += ` ${pack.tags.join(' ')}`;
+            if (Math.random() > 0.5) {
+                // use commas
+                prompt += `, ${pack.tags.join(', ')}`;
+            } else {
+                prompt += ` ${pack.tags.join(' ')}`;
+            }
         }
 
         prompt += `, ${artist_or_style}, ${medium}`;
-        if(Math.random() < 0.1) {
+        if(Math.random() < 0.15) {
             prompt += `, ${modifier}`;
         }
 
         prompt = prompt.trim();
+
+        // remove any text inside parentheses from word
+        word = word.replace(/\(.*?\)/g, '').trim();
+
+        // remove any text after a comma from word
+        word = word.split(',')[0].trim();
+
 
         return {
             word: word,

@@ -5,7 +5,7 @@ import {ActionRowBuilder, ButtonBuilder, ButtonStyle} from "discord.js";
 import {checkForPngSignature, fetchEndpoint} from "./bot-helpers.js";
 import {AttachmentBuilder, EmbedBuilder} from "discord.js";
 
-async function generateByStep(interaction, steps, prompt, seed) {
+async function generateByStep(interaction, steps, prompt, seed, packName ) {
     try {
 
         // are we currently running a render?
@@ -28,7 +28,7 @@ async function generateByStep(interaction, steps, prompt, seed) {
                 // use EmbedBuilder to create embed with image
                 const file = new AttachmentBuilder(buffer, {name: 'render.png'});
                 const embed = new EmbedBuilder()
-                    .setTitle(`Guess the prompt!`)
+                    .setTitle(`Guess the prompt! (Category ${packName})`)
                     .setImage('attachment://render.png');
 
                 // send embed with image
@@ -48,17 +48,20 @@ async function generateByStep(interaction, steps, prompt, seed) {
 
 
 async function pictionaryIntent(interaction, pictionaryLastPackName) {
-
     try {
-
         await interaction.deferReply();
+
+/*        if(interaction.isSelectMenu() && interaction.customId === 'new-round') {
+            await interaction.update({content: 'New round started!', components: []});
+        }*/
 
         const pictionary = new Pictionary();
 
         pictionaryLastPackName = pictionaryLastPackName === "All" ? null : pictionaryLastPackName;
         const {word, prompt} = pictionary.getRandomPrompt(pictionaryLastPackName);
 
-        const seed = Math.floor(Number.MAX_SAFE_INTEGER * Math.random())
+        let seed = Math.floor(Number.MAX_SAFE_INTEGER * Math.random())
+        const randomizeSeed = Math.random() > 0.4;
 
         // build a collector to listen if the user writes the word 'dolphin'
         const filter = m => allWordsInSentence(m.content, word);
@@ -83,19 +86,20 @@ async function pictionaryIntent(interaction, pictionaryLastPackName) {
             if (m.author.bot) return;
             // send a new message to the channel that they guessed correctly
             correctAuthor = m.author;
-            await interaction.channel.send(`Well done ${m.author}! You guessed the word!`);
+            await interaction.channel.send(`Well done ${m.author}! You guessed ${word}!`);
             runner.toggleGenerator(false);
             collector.stop();
         });
 
 
-        const stepArray = [1, 2, 4, 6, 8, 10, 15, 20];
+        const stepArray = [2, 4, 6, 8, 10, 15, 20];
         let stepIndex = 0;
 
         while (runner.isGenerating() && stepIndex < stepArray.length) {
             const steps = stepArray[stepIndex];
-            console.log(`Generating ${prompt} with ${steps} steps`);
-            await generateByStep(interaction, steps, prompt, seed);
+            seed = randomizeSeed ? Math.floor(Number.MAX_SAFE_INTEGER * Math.random()) : seed;
+            console.log(`Generating ${prompt} with ${steps} steps and seed ${seed}`);
+            await generateByStep(interaction, steps, prompt, seed, pictionaryLastPackName);
 
             // wait a few seconds
             if (stepIndex < stepArray.length - 1) {
