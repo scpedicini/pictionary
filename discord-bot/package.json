@@ -1,6 +1,6 @@
 {
   "name": "discord-bot",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "",
   "main": "src/bot.js",
   "scripts": {
@@ -9,8 +9,8 @@
     "prod": "export NODE_ENV=prod && node src/bot.js",
     "pm2-prod": "pm2 start npm --name discord-bot -- run prod"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Shaun Pedicini",
+  "license": "MIT",
   "dependencies": {
     "discord.js": "^14.5.0",
     "dotenv": "^16.0.2",

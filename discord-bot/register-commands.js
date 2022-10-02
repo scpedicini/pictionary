@@ -4,7 +4,7 @@ import path from 'path';
 
 dotenv.config();
 
-const {BOT_TOKEN, APP_ID, PUBLIC_KEY} = process.env;
+const {BOT_TOKEN, APP_ID } = process.env;
 
 const commands = [
     {

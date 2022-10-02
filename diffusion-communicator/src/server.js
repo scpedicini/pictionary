@@ -11,11 +11,10 @@ import {createResponseBody} from "./helpers.js";
 dotenv.config();
 
 const LOCAL_WIN_PORT = process.env.LOCAL_WIN_PORT || 3000;
-const EXTERNAL_WAN_PORT = process.env.EXTERNAL_WAN_PORT || 4000;
 const BEARER_TOKEN = `Bearer ${process.env.BEARER_TOKEN}`;
 const STABLE_DIFFUSION_ENDPOINT = process.env.STABLE_DIFFUSION_ENDPOINT;
 
-console.log(`LOCAL_WIN_PORT: ${LOCAL_WIN_PORT}, EXTERNAL_WAN_PORT: ${EXTERNAL_WAN_PORT}, BEARER_TOKEN: ${BEARER_TOKEN}, STABLE_DIFFUSION_ENDPOINT: ${STABLE_DIFFUSION_ENDPOINT}`);
+console.log(`LOCAL_WIN_PORT: ${LOCAL_WIN_PORT}, BEARER_TOKEN: ${BEARER_TOKEN}, STABLE_DIFFUSION_ENDPOINT: ${STABLE_DIFFUSION_ENDPOINT}`);
 
 const FAKE_GENERATED_JSON = JSON.parse(fs.readFileSync(path.resolve('samples/generate-sample.json'), 'utf8'));
 
