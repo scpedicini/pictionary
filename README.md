@@ -1,8 +1,6 @@
 
 <p align="center">
-    <a href="https://app.warp.dev/get_warp">
     <img alt="A picture of Bot Ross" src="discord-bot/assets/logo.png">
-    </a>
 </p>
 
 <p align="center">
