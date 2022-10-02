@@ -8,23 +8,23 @@
 <p align="center">
   <a href="https://specularrealms.com">Website</a>
   ·
-  <a href="#Getting Started">Getting Started</a>
+  <a href="#getting-started-">Getting Started</a>
   ·
   <a href="https://specularrealms.com">Blog Article</a>
 </p>
 
 
 - [About](#about)
-- [Getting Started 🏁](#getting-started)
+- [Getting Started](#getting-started-)
     * [Install Stable Diffusion](#install-stable-diffusion)
     * [Clone the Pictionary Repo](#clone-the-pictionary-repo)
     * [Set up the node express communicator](#set-up-the-node-express-communicator)
     * [Set up the Discord Bot](#set-up-the-discord-bot)
-- [Logic 🧩](#logic-🧩)
+- [Logic](#logic-)
     * [UML Diagram](#uml-diagram)
     * [Components](#components)
-- [Credits 🙏](#credits---)
-- [Support and Questions 🤔](#support-and-questions---)
+- [Credits](#credits-)
+- [Support and Questions](#support-and-questions-)
 
 
 # About
