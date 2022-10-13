@@ -8,7 +8,7 @@
   ·
   <a href="#getting-started-">Getting Started</a>
   ·
-  <a href="https://specularrealms.com">Blog Article</a>
+  <a href="https://specularrealms.com/2022/10/04/stable-diffusion-pictionary-with-bot-ross/">Blog Article</a>
 </p>
 
 

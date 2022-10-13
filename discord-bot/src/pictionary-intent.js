@@ -81,14 +81,14 @@ async function pictionaryIntent(interaction, pictionaryLastPackName) {
         })();
 
         // listen for the first message that matches the filter
-        collector.on('collect', async m => {
+        collector.once('collect', async m => {
             // reject if this is the bot
             if (m.author.bot) return;
             // send a new message to the channel that they guessed correctly
             correctAuthor = m.author;
             await interaction.channel.send(`Well done ${m.author}! You guessed ${word}!`);
             runner.toggleGenerator(false);
-            collector.stop();
+            // collector.stop();
         });
 
 
