@@ -58,7 +58,7 @@ async function pictionaryIntent(interaction, pictionaryLastPackName) {
         const pictionary = new Pictionary();
 
         pictionaryLastPackName = pictionaryLastPackName === "All" ? null : pictionaryLastPackName;
-        const {word, prompt} = pictionary.getRandomPrompt(pictionaryLastPackName);
+        const {word, prompt, packName} = pictionary.getRandomPrompt(pictionaryLastPackName);
 
         let seed = Math.floor(Number.MAX_SAFE_INTEGER * Math.random())
         const randomizeSeed = Math.random() > 0.4;
@@ -99,7 +99,7 @@ async function pictionaryIntent(interaction, pictionaryLastPackName) {
             const steps = stepArray[stepIndex];
             seed = randomizeSeed ? Math.floor(Number.MAX_SAFE_INTEGER * Math.random()) : seed;
             console.log(`Generating ${prompt} with ${steps} steps and seed ${seed}`);
-            await generateByStep(interaction, steps, prompt, seed, pictionaryLastPackName);
+            await generateByStep(interaction, steps, prompt, seed, packName);
 
             // wait a few seconds
             if (stepIndex < stepArray.length - 1) {

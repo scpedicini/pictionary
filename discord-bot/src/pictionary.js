@@ -201,7 +201,8 @@ class Pictionary {
 
         return {
             word: word,
-            prompt: prompt
+            prompt: prompt,
+            packName: pack.name
         };
     }
 
