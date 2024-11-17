@@ -42,7 +42,7 @@ function removeStopWords(tokens) {
 function allWordsInSentence(sentence1, sentence2) {
     const tokens1 = removeStopWords(tokenize(sentence1));
     const tokens2 = removeStopWords(tokenize(sentence2));
-    const allTokensFound = allTokensInArray(tokens1, tokens2);
+    const allTokensFound = tokens1.length > 0 && allTokensInArray(tokens1, tokens2);
     return allTokensFound;
 }
 
